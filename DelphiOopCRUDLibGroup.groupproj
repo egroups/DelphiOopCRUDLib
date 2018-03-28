@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1100D51D-FC75-4EE8-918A-682B222CC799}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="DelphiOopCRUDLib.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DelphiOopCRUDLib">
+        <MSBuild Projects="DelphiOopCRUDLib.dproj"/>
+    </Target>
+    <Target Name="DelphiOopCRUDLib:Clean">
+        <MSBuild Projects="DelphiOopCRUDLib.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiOopCRUDLib:Make">
+        <MSBuild Projects="DelphiOopCRUDLib.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DelphiOopCRUDLib"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DelphiOopCRUDLib:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DelphiOopCRUDLib:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
