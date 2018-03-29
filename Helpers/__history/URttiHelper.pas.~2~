@@ -1,0 +1,19 @@
+unit URttiHelper;
+
+interface
+
+type
+  TRttiHelper = class
+    class function MethodIsImplemented(const theClass: TClass; methodName: string): Boolean;
+  end;
+
+implementation
+
+{ TRttiHelper }
+
+class function TRttiHelper.MethodIsImplemented(const theClass: TClass; methodName: string): Boolean;
+begin
+
+end;
+
+end.

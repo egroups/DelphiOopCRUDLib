@@ -31,10 +31,7 @@ requires
   rtl;
 
 contains
-  UStringHelper in 'Helpers\UStringHelper.pas',
-  URttiHelper in 'Helpers\URttiHelper.pas',
-  UCustomEditHelper in 'Helpers\UCustomEditHelper.pas',
-  UComboboxHelper in 'Helpers\UComboboxHelper.pas',
-  UClientDataSetHelper in 'Helpers\UClientDataSetHelper.pas';
+  UStringHelper in 'Helppers\UStringHelper.pas',
+  URttiHelper in 'Helppers\URttiHelper.pas';
 
 end.

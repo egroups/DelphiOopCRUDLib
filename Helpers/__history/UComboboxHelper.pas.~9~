@@ -1,0 +1,23 @@
+unit UComboboxHelper;
+
+interface
+
+uses Vcl.StdCtrls, System.Classes;
+
+type
+  TComboboxHelper = class helper for TCustomCombo
+    procedure AddList(const firstItemEmpty: Boolean = false;const list: TStringList);
+  end;
+
+implementation
+
+{ TComboboxHelper }
+
+procedure TComboboxHelper.AddList(const firstItemEmpty: Boolean; const List: TStringList);
+begin
+  Self.Items.Clear();
+  if (FirstItemEmpty then
+
+end;
+
+end.

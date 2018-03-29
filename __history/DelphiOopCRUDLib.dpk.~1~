@@ -30,11 +30,4 @@ package DelphiOopCRUDLib;
 requires
   rtl;
 
-contains
-  UStringHelper in 'Helpers\UStringHelper.pas',
-  URttiHelper in 'Helpers\URttiHelper.pas',
-  UCustomEditHelper in 'Helpers\UCustomEditHelper.pas',
-  UComboboxHelper in 'Helpers\UComboboxHelper.pas',
-  UClientDataSetHelper in 'Helpers\UClientDataSetHelper.pas';
-
 end.

@@ -1,0 +1,71 @@
+unit UCustomEditHelper;
+
+interface
+
+uses Vcl.StdCtrls;
+
+type
+  TCustomEditHelper = class helper for TCustomEdit
+    procedure RemoveAccents();
+    procedure TrimSpaces();
+    procedure RemoveSpecialCaracters();
+    function IsEmpty(): Boolean;
+    function IsNotEmpty(): Boolean;
+    procedure ToUpper();
+    procedure ToLower();
+    procedure Replace(const old: string; const new: string = '');
+    function HasWord(const word: string): Boolean;
+  end;
+
+implementation
+
+uses UStringUtils;
+
+{ TCustomEditHelper }
+
+procedure TCustomEditHelper.RemoveAccents;
+begin
+
+end;
+
+procedure TCustomEditHelper.TrimSpaces;
+begin
+
+end;
+
+procedure TCustomEditHelper.RemoveSpecialCaracters;
+begin
+
+end;
+
+function TCustomEditHelper.IsEmpty: Boolean;
+begin
+
+end;
+
+function TCustomEditHelper.IsNotEmpty: Boolean;
+begin
+
+end;
+
+procedure TCustomEditHelper.ToLower;
+begin
+
+end;
+
+procedure TCustomEditHelper.ToUpper;
+begin
+
+end;
+
+procedure TCustomEditHelper.Replace(const old, new: string);
+begin
+
+end;
+
+function TCustomEditHelper.HasWord(const word: string): Boolean;
+begin
+
+end;
+
+end.
