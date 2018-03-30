@@ -166,10 +166,7 @@ end;
 function TClientDataSetHelper.Save(const UserRequiredFieldsValidation, showSuccesMessage: Boolean): Boolean;
 begin
   try
-    releaseReadOnly();
-
-
-  //    releaseReadOnly().repareToSave().
+    releaseReadOnly().repareToSave().
 
   except on E: Exception do
   //TMensagem.Instancia.AlertaErro('Erro ao Gravar dos dados: ' + e.Message);

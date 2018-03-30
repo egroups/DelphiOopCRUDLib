@@ -6,7 +6,7 @@ uses Vcl.StdCtrls, System.Classes;
 
 type
   TComboboxHelper = class helper for TCustomCombo
-    procedure AddList(const list: TStringList; const firstItemEmpty: Boolean = false);
+    procedure AddList(const firstItemEmpty: Boolean = false;const list: TStringList = nil);
   end;
 
 implementation
@@ -15,7 +15,7 @@ uses System.SysUtils;
 
 { TComboboxHelper }
 
-procedure TComboboxHelper.AddList(const list: TStringList; const firstItemEmpty: Boolean = false);
+procedure TComboboxHelper.AddList(const firstItemEmpty: Boolean; const list: TStringList);
 begin
   Self.Items.Clear();
   if (firstItemEmpty) then

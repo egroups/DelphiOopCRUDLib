@@ -26,8 +26,8 @@ type
     procedure Delete(const applyUpdate: Boolean = true);
     procedure Edit();
     procedure Cancel();
-    function Save(const UserRequiredFieldsValidation: Boolean = true; const showSuccesMessage: Boolean = true): Boolean;
-    procedure Reload();
+    function Save(const ValidateRequiredFields: Boolean = true; const showSuccesMessage: Boolean = true): Boolean;
+    procedure Reload(const reConnect: Boolean = false);
   end;
 
 implementation
@@ -163,23 +163,15 @@ begin
 
 end;
 
-function TClientDataSetHelper.Save(const UserRequiredFieldsValidation, showSuccesMessage: Boolean): Boolean;
+function TClientDataSetHelper.Save(const ValidateRequiredFields, showSuccesMessage: Boolean): Boolean;
 begin
-  try
-    releaseReadOnly();
 
-
-  //    releaseReadOnly().repareToSave().
-
-  except on E: Exception do
-  //TMensagem.Instancia.AlertaErro('Erro ao Gravar dos dados: ' + e.Message);
-  end;
 end;
 
-procedure TClientDataSetHelper.Reload();
+procedure TClientDataSetHelper.Reload(const reConnect: Boolean);
 begin
-  Close();
-  Open();
+  if reconnect then
+
 end;
 
 procedure TClientDataSetHelper.IterateFields(callBack: TCallBackIterateFields);
