@@ -28,17 +28,13 @@ package DelphiOopCRUDLib;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl,
-  vcl,
-  dbrtl,
-  dsnap;
+  rtl;
 
 contains
   UStringHelper in 'Helpers\UStringHelper.pas',
   URttiHelper in 'Helpers\URttiHelper.pas',
   UCustomEditHelper in 'Helpers\UCustomEditHelper.pas',
   UComboboxHelper in 'Helpers\UComboboxHelper.pas',
-  UClientDataSetHelper in 'Helpers\UClientDataSetHelper.pas',
-  UMessenger in 'Utilities\UMessenger.pas';
+  UClientDataSetHelper in 'Helpers\UClientDataSetHelper.pas';
 
 end.

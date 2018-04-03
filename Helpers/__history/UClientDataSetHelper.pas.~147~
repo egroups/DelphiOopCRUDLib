@@ -12,27 +12,34 @@ type
     function GetKeyValue: Variant;
     procedure SetKeyValue(const Value: Variant);
     procedure IterateFields(callBack: TCallBackIterateFields);
+    procedure ReleaseReadOnly();
+    function CanPrepareToSave() : Boolean;
+    function CanDelete() : Boolean;
+    function CanEdit() : Boolean;
+    function CanAppend() : Boolean;
   public
     property KeyValue: Variant read GetKeyValue write SetKeyValue;
 
     function InEditModes(): Boolean;
     function GetRequiredFieldNames(): TStringList;
-    function ValidateRequiredFields(const showMessage: Boolean = false): Boolean;
+    function ValidateRequiredFields(const UserRequiredFieldsValidation : Boolean; const showMessage: Boolean = false): Boolean;
     function GetKeyName(): String;
     function GetMaxKeyValue(): Variant;
 
     procedure InsertOrEdit();
     procedure Insert();
-    procedure Delete(const applyUpdate: Boolean = true);
+    procedure Delete(const UseApplyUpdate: Boolean = true);
     procedure Edit();
     procedure Cancel();
-    function Save(const ValidateRequiredFields: Boolean = true; const showSuccesMessage: Boolean = true): Boolean;
-    procedure Reload(const reConnect: Boolean = false);
+    function Save(const UserRequiredFieldsValidation: Boolean = true; const showSuccesMessage: Boolean = true): Boolean;
+    procedure Reload();
   end;
 
 implementation
 
 uses System.SysUtils, System.StrUtils, System.Variants, UStringHelper;
+
+const INTGR_MAXIMUM_ERRORS_ALLOWED = 0;
 
 { TClientDataSetHelper }
 
@@ -66,10 +73,15 @@ begin
   Result := retorno;
 end;
 
-function TClientDataSetHelper.ValidateRequiredFields(const showMessage : Boolean): Boolean;
+function TClientDataSetHelper.ValidateRequiredFields(const UserRequiredFieldsValidation : Boolean; const showMessage : Boolean): Boolean;
 var
   hasRequiredEmpty: Boolean;
 begin
+  if (not UserRequiredFieldsValidation) then
+  begin
+    Exit(True);
+  end;
+
   IterateFields(procedure (field: TField; out stop : boolean)
                 begin
                   if (field.Required) and ((field.IsNull) or (field.AsString.IsEmpty())) then
@@ -134,7 +146,7 @@ begin
     end;
   finally
     EnableControls();
-    exit(value);
+    Result := value;
   end;
 end;
 
@@ -145,36 +157,97 @@ end;
 
 procedure TClientDataSetHelper.Insert;
 begin
-
+  if (CanAppend()) then
+    Append();
 end;
 
 procedure TClientDataSetHelper.Edit;
 begin
-
+  if (CanEdit()) then
+    Edit();
 end;
 
-procedure TClientDataSetHelper.Delete(const applyUpdate: Boolean);
+procedure TClientDataSetHelper.Delete(const UseApplyUpdate: Boolean);
 begin
+  if (CanDelete()) then
+  begin
+    Delete();
+    if (UseApplyUpdate) then
+    begin
+      Self.ApplyUpdates(INTGR_MAXIMUM_ERRORS_ALLOWED);
+    end;
+  end;
+end;
 
+function TClientDataSetHelper.CanAppend: Boolean;
+begin
+  if (not Self.Active) then
+  begin
+    try
+      Self.Open();
+    except on E: Exception do
+      begin
+        //Log the mesasge
+        Result := False;
+      end;
+    end;
+  end;
+  Result := True;
 end;
 
 procedure TClientDataSetHelper.Cancel;
 begin
-
+  if (Self.Active) then
+    CancelUpdates();
 end;
 
-function TClientDataSetHelper.Save(const ValidateRequiredFields, showSuccesMessage: Boolean): Boolean;
+function TClientDataSetHelper.Save(const UserRequiredFieldsValidation, showSuccesMessage: Boolean): Boolean;
+const INTGR_MINIMUM_CHANGES_TO_SAVE = 0;
+var
+  stateAtBegin : TDataSetState;
+  isAbleToSave : Boolean;
 begin
+  stateAtBegin := State;
+  try
+    ReleaseReadOnly();
+    isAbleToSave := CanPrepareToSave() and ValidateRequiredFields(UserRequiredFieldsValidation, showSuccesMessage);
 
-end;
+    if isAbleToSave then
+    begin
+      if (ChangeCount > INTGR_MINIMUM_CHANGES_TO_SAVE) and (State <> stateAtBegin) then
+      begin
+        Edit();
+      end;
 
-procedure TClientDataSetHelper.Reload(const reConnect: Boolean);
-begin
-  if reConnect then
-  begin
-    Close();
+      ApplyUpdates(INTGR_MAXIMUM_ERRORS_ALLOWED);
+    end;
+
+    if (ChangeCount < INTGR_MINIMUM_CHANGES_TO_SAVE) then
+    begin
+      if (showSuccesMessage) then
+      begin
+        //Show the message
+      end;
+
+      Exit(true);
+    end;
+  except on E: Exception do
+  //TMensagem.Instancia.AlertaErro('Erro ao Gravar dos dados: ' + e.Message);
   end;
 
+  Result := False;
+end;
+
+procedure TClientDataSetHelper.ReleaseReadOnly;
+begin
+  if (ReadOnly) then
+    ReadOnly := False;
+end;
+
+procedure TClientDataSetHelper.Reload();
+begin
+  Close();
+  Open();
 end;
 
 procedure TClientDataSetHelper.IterateFields(callBack: TCallBackIterateFields);
@@ -190,6 +263,45 @@ begin
     if doStop then
       Break;
   end;
+end;
+
+function TClientDataSetHelper.CanDelete: Boolean;
+const INTGR_MINIMUM_RECORDS = 0;
+begin
+  if (Self.Active) then
+  begin
+    Exit(Self.RecordCount > INTGR_MINIMUM_RECORDS);
+  end;
+
+  Result := False;
+end;
+
+function TClientDataSetHelper.CanEdit: Boolean;
+begin
+  if (not Self.Active) then
+  begin
+    try
+      Self.Open();
+    except on E: Exception do
+      begin
+        //Log the message
+        Result := False;
+      end;
+    end;
+  end;
+
+  Result := True;
+end;
+
+function TClientDataSetHelper.CanPrepareToSave(): Boolean;
+begin
+  if Self.Active and (State in dsEditModes) then
+  begin
+    Post();
+    Exit(True);
+  end;
+
+  Exit(False);
 end;
 
 end.

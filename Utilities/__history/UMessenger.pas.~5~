@@ -1,0 +1,26 @@
+unit UMessenger;
+
+interface
+
+uses Vcl.Dialogs, System.classes;
+
+type
+  TMessenger = class
+  private
+    class function BaseMessage(const strgMessage : string; const tpMessage : TMsgDlgType; const Buttons : TMsgDlgButtons = [mbOK]) : Integer;
+  public
+    class procedure Alert(const strgMessage : String); overload;
+    class procedure Alert(const LstMessage : TStringList) : overload;
+  end;
+
+implementation
+
+{ TMessenger }
+
+class function TMessenger.BaseMessage(const strgMessage: string; const tpMessage: TMsgDlgType; const Buttons: TMsgDlgButtons): Integer;
+const INTGR_MESSAGE_HELP_CONTEX = 0;
+begin
+  Result := MessageDlg(strgMessage, tpMessage, Buttons, INTGR_MESSAGE_HELP_CONTEX);
+end;
+
+end.

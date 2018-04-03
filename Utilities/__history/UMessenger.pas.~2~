@@ -1,0 +1,17 @@
+unit UMessenger;
+
+interface
+
+uses Vcl.Dialogs;
+
+type
+  TMessenger = class
+  private
+    class function BaseMessage(const strgMessage : string; const tpMessage : TMsgDlgType; const Buttons : TMsgDlgButtons = [mbOK]);
+  public
+
+  end;
+
+implementation
+
+end.

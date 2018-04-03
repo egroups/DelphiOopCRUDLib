@@ -1,0 +1,24 @@
+unit UMessenger;
+
+interface
+
+uses Vcl.Dialogs;
+
+type
+  TMessenger = class
+  private
+    class function BaseMessage(const strgMessage : string; const tpMessage : TMsgDlgType; const Buttons : TMsgDlgButtons = [mbOK]) : Integer;
+  public
+
+  end;
+
+implementation
+
+{ TMessenger }
+
+class function TMessenger.BaseMessage(const strgMessage: string; const tpMessage: TMsgDlgType; const Buttons: TMsgDlgButtons): Integer;
+begin
+  Result := MessageDlg(strgMessage, tpMessage, Buttons)
+end;
+
+end.
